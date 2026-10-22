@@ -8,7 +8,13 @@
     "roc_auc": 0.989,
     "pr_auc": 0.8866
   },
-  "test": "TODO \u2014 run test evaluation on Day 4",
+  "test": {
+    "precision": 0.8417,
+    "recall": 0.7891,
+    "f1": 0.8145,
+    "roc_auc": 0.9888,
+    "pr_auc": 0.8929
+  },
   "train_size": 12319,
   "val_size": 2640,
   "test_size": 2640,

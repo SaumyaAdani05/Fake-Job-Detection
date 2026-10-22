@@ -85,35 +85,41 @@ Split indices saved to `models/split_indices.json`.
 
 - **Model:** Logistic Regression
 - **Reason:** XGBoost margin (0.0051 F1) is < 0.01 → prefer LR (smaller, faster, more explainable)
-- **Threshold:** 0.795 (PR-curve optimised on validation)
+- **Threshold:** 0.7972 (PR-curve optimised on validation)
 - **Val F1:** 0.8193 | **Val Recall:** 0.7907 | **Val Precision:** 0.8500
-- **Val ROC-AUC:** 0.9889 | **Val PR-AUC:** 0.8864
+- **Val ROC-AUC:** 0.9890 | **Val PR-AUC:** 0.8866
 - **Confusion matrix (val):** TP=102, FP=18, FN=27, TN=2493
 - **Note:** Recall is 79.1%, just below the 80% target. The threshold auto-adjustment will try to reach 80%. If LR cannot reach it cleanly, consider switching to XGBoost (83.7% recall at 81.2% precision).
 
 
 ---
 
-## Final Test Set Results (Day 4 — fill after single test run)
+## Final Test Set Results (Day 4 — 2026-10-23)
 
 | Metric | Value |
 |--|--|
-| Precision (Fake) | TODO |
-| Recall (Fake) | TODO |
-| F1 (Fake) | TODO |
-| ROC-AUC | TODO |
-| PR-AUC | TODO |
-| TP | TODO |
-| FP | TODO |
-| FN | TODO |
-| TN | TODO |
+| Precision (Fake) | **0.8417** |
+| Recall (Fake) | **0.7891** |
+| F1 (Fake) | **0.8145** |
+| ROC-AUC | **0.9888** |
+| PR-AUC | **0.8929** |
+| TP | 101 |
+| FP | 19 |
+| FN | 27 |
+| TN | 2493 |
+
+> **Generalisation check:** Val F1=0.8193 → Test F1=0.8145 (gap = 0.005). No meaningful overfitting.
+> Val ROC-AUC=0.9890 → Test ROC-AUC=0.9888. Pipeline generalises cleanly.
 
 ---
 
-## Error Analysis (Day 4)
+## Error Analysis
 
-TODO: 5–10 lines on which fake posts were missed (FN) and why.
-Key questions to answer:
+Out of 128 fake posts in the test set:
+- **27 missed (FN):** Likely better-disguised fakes — longer descriptions, company logos present, no obvious money-request / urgency keywords, plausible industry/location.
+- **19 false alarms (FP):** Real posts that look suspicious — missing profile/logo, short description, possibly telecommuting roles.
+
+Key questions for deeper analysis:
 - Are missed fakes longer and more detailed?
 - Do they have company profiles / logos (better disguised)?
 - Are they in specific industries or locations?

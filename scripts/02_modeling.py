@@ -421,44 +421,17 @@ def main():
         print("WARNING: Model file exceeds 50 MB limit!")
 
     # ------------------------------------------------------------------
-    # 9. TEST SET EVALUATION (only run when ready!)
+    # 9. TEST SET EVALUATION — Day 4 final evaluation
     # ------------------------------------------------------------------
-    # IMPORTANT: Uncomment only on Day 4 for the single final test evaluation.
-    # Do NOT uncomment during development/tuning.
-    #
-    # print(f"\n{'=' * 50}")
-    # print("FINAL TEST SET EVALUATION")
-    # print(f"{'=' * 50}")
-    # y_test_prob = best_pipeline.predict_proba(X_test)[:, 1]
-    # y_test_pred = (y_test_prob >= best_threshold).astype(int)
-    # test_metrics = evaluate_model(y_test, y_test_pred, y_test_prob, best_model_name, "TEST")
-    #
-    # # Save metrics.json
-    # metrics = {
-    #     "model": best_model_name,
-    #     "threshold": round(best_threshold, 4),
-    #     "test": {
-    #         "precision": test_metrics["precision"],
-    #         "recall": test_metrics["recall"],
-    #         "f1": test_metrics["f1"],
-    #         "roc_auc": test_metrics["roc_auc"],
-    #         "pr_auc": test_metrics["pr_auc"],
-    #     },
-    #     "train_size": len(X_train),
-    #     "val_size": len(X_val),
-    #     "test_size": len(X_test),
-    #     "sklearn_version": sklearn.__version__,
-    #     "trained_on": datetime.now().strftime("%Y-%m-%d"),
-    # }
-    # metrics_path = MODELS_DIR / "metrics.json"
-    # with open(metrics_path, "w") as f:
-    #     json.dump(metrics, f, indent=2)
-    # print(f"\nMetrics saved to {metrics_path}")
+    print(f"\n{'=' * 50}")
+    print("FINAL TEST SET EVALUATION")
+    print(f"{'=' * 50}")
+    y_test_prob = best_pipeline.predict_proba(X_test)[:, 1]
+    y_test_pred = (y_test_prob >= best_threshold).astype(int)
+    test_metrics = evaluate_model(y_test, y_test_pred, y_test_prob, best_model_name, "TEST")
 
-    # ------------------------------------------------------------------
-    # 10. Save validation metrics.json (preliminary, before test)
-    # ------------------------------------------------------------------
-    val_metrics = {
+    # Save combined val + test metrics.json (final artifact)
+    metrics = {
         "model": best_model_name,
         "threshold": round(best_threshold, 4),
         "validation": {
@@ -468,7 +441,13 @@ def main():
             "roc_auc": best["roc_auc"],
             "pr_auc": best["pr_auc"],
         },
-        "test": "TODO — run test evaluation on Day 4",
+        "test": {
+            "precision": test_metrics["precision"],
+            "recall": test_metrics["recall"],
+            "f1": test_metrics["f1"],
+            "roc_auc": test_metrics["roc_auc"],
+            "pr_auc": test_metrics["pr_auc"],
+        },
         "train_size": len(X_train),
         "val_size": len(X_val),
         "test_size": len(X_test),
@@ -478,8 +457,11 @@ def main():
     }
     metrics_path = MODELS_DIR / "metrics.json"
     with open(metrics_path, "w") as f:
-        json.dump(val_metrics, f, indent=2)
-    print(f"Validation metrics saved to {metrics_path}")
+        json.dump(metrics, f, indent=2)
+    print(f"\nFinal metrics (val + test) saved to {metrics_path}")
+
+
+    # (Section 10 merged into section 9 — combined val+test metrics.json already saved above)
 
     # ------------------------------------------------------------------
     # 11. Plot PR curve for best model
@@ -503,9 +485,9 @@ def main():
     print(f"{'=' * 60}")
     print(f"  Model: {best_model_name}")
     print(f"  Threshold: {best_threshold:.4f}")
-    print(f"  Val F1: {best['f1']:.4f}, Val Recall: {best['recall']:.4f}")
+    print(f"  Val  F1: {best['f1']:.4f}  Recall: {best['recall']:.4f}")
+    print(f"  Test F1: {test_metrics['f1']:.4f}  Recall: {test_metrics['recall']:.4f}")
     print(f"  File: {model_path} ({file_size_mb:.1f} MB)")
-    print(f"  Test set: NOT YET EVALUATED (Day 4)")
     print(f"{'=' * 60}")
 
 
