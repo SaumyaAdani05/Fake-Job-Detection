@@ -260,6 +260,10 @@ class RareCategoryGrouper(BaseEstimator, TransformerMixin):
     """
     One-hot-encode categorical columns, grouping rare categories into 'other'.
     Also extracts country from 'location'.
+
+    Uses sorted, fixed column lists fitted from training data so that
+    transform() always produces the same feature set regardless of which
+    category values appear in the current batch (single row or full dataset).
     """
 
     def __init__(
@@ -269,13 +273,12 @@ class RareCategoryGrouper(BaseEstimator, TransformerMixin):
     ):
         self.categorical_cols = categorical_cols or CATEGORICAL_COLS
         self.rare_threshold = rare_threshold
-        self.category_maps_ = {}  # col -> set of kept categories
+        self.category_maps_: dict = {}   # col -> set of kept categories
+        self.all_cats_: dict = {}         # col -> sorted list for transform
 
     def fit(self, X: pd.DataFrame, y=None):
         self.category_maps_ = {}
-        all_cats = list(self.categorical_cols)
-        if "location" in X.columns:
-            all_cats.append("_country")
+        self.all_cats_ = {}
 
         for col in self.categorical_cols:
             if col in X.columns:
@@ -285,40 +288,58 @@ class RareCategoryGrouper(BaseEstimator, TransformerMixin):
                 kept = set(counts[counts >= self.rare_threshold].index)
                 kept.add("missing")
                 self.category_maps_[col] = kept
+                self.all_cats_[col] = sorted(kept | {"other"})
 
-        # Country from location
+        # Country extracted from location
         if "location" in X.columns:
             countries = X["location"].apply(extract_country)
             counts = countries.value_counts()
             kept = set(counts[counts >= self.rare_threshold].index)
             kept.add("missing")
             self.category_maps_["_country"] = kept
+            self.all_cats_["_country"] = sorted(kept | {"other"})
 
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-        result = pd.DataFrame(index=X.index)
+        frames = []
 
         for col in self.categorical_cols:
+            kept = self.category_maps_.get(col, {"missing"})
+            all_cats = self.all_cats_.get(col, sorted(kept | {"other"}))
+
             if col in X.columns:
                 filled = X[col].fillna("missing").astype(str).str.strip()
                 filled = filled.where(filled != "", "missing")
-                kept = self.category_maps_.get(col, {"missing"})
                 grouped = filled.apply(lambda v: v if v in kept else "other")
-                dummies = pd.get_dummies(grouped, prefix=col, dtype=int)
-                result = pd.concat([result, dummies], axis=1)
             else:
-                result[f"{col}_missing"] = 1
+                grouped = pd.Series(["missing"] * len(X), index=X.index)
+
+            # Build all dummy columns at once — avoids DataFrame fragmentation
+            dummy_dict = {
+                f"{col}_{cat}": (grouped == cat).astype(int)
+                for cat in all_cats
+            }
+            frames.append(pd.DataFrame(dummy_dict, index=X.index))
 
         # Country from location
-        if "location" in X.columns:
-            countries = X["location"].apply(extract_country)
-            kept = self.category_maps_.get("_country", {"missing"})
+        if "_country" in self.category_maps_:
+            kept = self.category_maps_["_country"]
+            all_cats = self.all_cats_.get("_country", sorted(kept | {"other"}))
+            if "location" in X.columns:
+                countries = X["location"].apply(extract_country)
+            else:
+                countries = pd.Series(["missing"] * len(X), index=X.index)
             grouped = countries.apply(lambda v: v if v in kept else "other")
-            dummies = pd.get_dummies(grouped, prefix="country", dtype=int)
-            result = pd.concat([result, dummies], axis=1)
+            dummy_dict = {
+                f"country_{cat}": (grouped == cat).astype(int)
+                for cat in all_cats
+            }
+            frames.append(pd.DataFrame(dummy_dict, index=X.index))
 
-        return result
+        return pd.concat(frames, axis=1) if frames else pd.DataFrame(index=X.index)
+
+
 
 
 # ---------------------------------------------------------------------------

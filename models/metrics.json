@@ -1,0 +1,123 @@
+{
+  "model": "Logistic Regression",
+  "threshold": 0.7972,
+  "validation": {
+    "precision": 0.85,
+    "recall": 0.7907,
+    "f1": 0.8193,
+    "roc_auc": 0.989,
+    "pr_auc": 0.8866
+  },
+  "test": "TODO \u2014 run test evaluation on Day 4",
+  "train_size": 12319,
+  "val_size": 2640,
+  "test_size": 2640,
+  "sklearn_version": "1.5.2",
+  "trained_on": "2026-10-23",
+  "comparison_table": [
+    {
+      "model": "Baseline (stratified)",
+      "split": "val (t=0.5)",
+      "precision": 0.0534,
+      "recall": 0.0543,
+      "f1": 0.0538,
+      "roc_auc": 0.5024,
+      "pr_auc": 0.0491,
+      "tp": 7,
+      "fp": 124,
+      "fn": 122,
+      "tn": 2387
+    },
+    {
+      "model": "Baseline (most_frequent)",
+      "split": "val (t=0.5)",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "roc_auc": 0.5,
+      "pr_auc": 0.0489,
+      "tp": 0,
+      "fp": 0,
+      "fn": 129,
+      "tn": 2511
+    },
+    {
+      "model": "Logistic Regression",
+      "split": "val (t=0.5)",
+      "precision": 0.5735,
+      "recall": 0.938,
+      "f1": 0.7118,
+      "roc_auc": 0.989,
+      "pr_auc": 0.8866,
+      "tp": 121,
+      "fp": 90,
+      "fn": 8,
+      "tn": 2421
+    },
+    {
+      "model": "Logistic Regression",
+      "split": "val (t=0.797)",
+      "precision": 0.85,
+      "recall": 0.7907,
+      "f1": 0.8193,
+      "roc_auc": 0.989,
+      "pr_auc": 0.8866,
+      "tp": 102,
+      "fp": 18,
+      "fn": 27,
+      "tn": 2493
+    },
+    {
+      "model": "Random Forest",
+      "split": "val (t=0.5)",
+      "precision": 0.7851,
+      "recall": 0.7364,
+      "f1": 0.76,
+      "roc_auc": 0.9879,
+      "pr_auc": 0.8604,
+      "tp": 95,
+      "fp": 26,
+      "fn": 34,
+      "tn": 2485
+    },
+    {
+      "model": "Random Forest",
+      "split": "val (t=0.578)",
+      "precision": 0.8969,
+      "recall": 0.6744,
+      "f1": 0.7699,
+      "roc_auc": 0.9879,
+      "pr_auc": 0.8604,
+      "tp": 87,
+      "fp": 10,
+      "fn": 42,
+      "tn": 2501
+    },
+    {
+      "model": "XGBoost",
+      "split": "val (t=0.5)",
+      "precision": 0.806,
+      "recall": 0.8372,
+      "f1": 0.8213,
+      "roc_auc": 0.9902,
+      "pr_auc": 0.9034,
+      "tp": 108,
+      "fp": 26,
+      "fn": 21,
+      "tn": 2485
+    },
+    {
+      "model": "XGBoost",
+      "split": "val (t=0.521)",
+      "precision": 0.812,
+      "recall": 0.8372,
+      "f1": 0.8244,
+      "roc_auc": 0.9902,
+      "pr_auc": 0.9034,
+      "tp": 108,
+      "fp": 25,
+      "fn": 21,
+      "tn": 2486
+    }
+  ]
+}
