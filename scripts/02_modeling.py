@@ -60,6 +60,7 @@ FIGURES_DIR = PROJECT_ROOT / "notebooks" / "figures"
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
+# pyrefly: ignore[missing-import]
 from preprocess import (
     TEXT_COLS, CATEGORICAL_COLS, BINARY_COLS, MISSING_FLAG_COLS,
     TextCombiner, FeatureEngineer, RareCategoryGrouper,

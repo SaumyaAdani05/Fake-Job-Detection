@@ -32,6 +32,8 @@ FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 # Add src to path
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+# pyrefly: ignore[missing-import]
 from preprocess import (
     load_dataset, drop_exact_duplicates, TEXT_COLS,
     count_exclamations, count_all_caps_words,
