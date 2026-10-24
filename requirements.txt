@@ -1,3 +1,5 @@
+
+# Runtime dependencies (deployed to Render)
 streamlit==1.39.0
 scikit-learn==1.5.2
 pandas==2.2.3

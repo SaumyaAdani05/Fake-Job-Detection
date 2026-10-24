@@ -1,5 +1,29 @@
+# Dataset (never commit)
+data/
+dataset/fake_job_postings.csv
+
+# Virtual environments
 .venv/
+venv/
+env/
+
+# Python
 __pycache__/
 *.py[cod]
-.env
+*$py.class
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Operating system
 .DS_Store
+Thumbs.db
+
+# Secrets
+.env
+
+# IDE
+.vscode/
+.idea/
+
