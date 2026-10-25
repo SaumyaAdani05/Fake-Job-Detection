@@ -388,60 +388,92 @@ st.markdown("""
         padding-bottom: 3rem;
     }
 
-    h1, h2, h3 {
-        color: #142D4E !important;
+    /* Headings in bold black */
+    h1, h2, h3, h4, h5, h6,
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+    .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+        color: #000000 !important;
     }
 
-    p, label, .stMarkdown {
-        color: #334155;
+    /* General body & markdown text */
+    p, label, .stMarkdown, .stMarkdown p {
+        color: #000000 !important;
     }
 
-    
-div.stButton > button,
-div.stFormSubmitButton > button,
-div[data-testid="stFormSubmitButton"] > button {
-    background-color: #17365D !important;
-    color: #FFFFFF !important;
-    border: 1px solid #17365D !important;
-    border-radius: 8px;
-    min-height: 44px;
-    font-weight: 600;
-}
-
-div.stButton > button p,
-div.stFormSubmitButton > button p,
-div[data-testid="stFormSubmitButton"] > button p {
-    color: #FFFFFF !important;
-}
-
-div.stButton > button:hover,
-div.stFormSubmitButton > button:hover,
-div[data-testid="stFormSubmitButton"] > button:hover {
-    background-color: #244F7D !important;
-    color: #FFFFFF !important;
-    border-color: #244F7D !important;
-}
-
-
-    div.stButton > button:hover,
-    div.stFormSubmitButton > button:hover {
-        background-color: #244F7D;
-        color: white;
-        border: 1px solid #244F7D;
+    /* Form labels, radio, checkbox text */
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] label p,
+    div[data-testid="stCheckbox"] label,
+    div[data-testid="stCheckbox"] label p,
+    .stTextInput label,
+    .stTextArea label,
+    .stSelectbox label {
+        color: #000000 !important;
+        font-weight: 500 !important;
     }
 
+    /* Metrics card & text */
+    div[data-testid="stMetric"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #DCE4EE;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    div[data-testid="stMetricLabel"],
+    div[data-testid="stMetricLabel"] *,
+    div[data-testid="stMetricLabel"] p {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+
+    div[data-testid="stMetricValue"],
+    div[data-testid="stMetricValue"] *,
+    div[data-testid="stMetricValue"] div {
+        color: #000000 !important;
+        font-weight: 700 !important;
+    }
+
+    /* Caption text */
+    [data-testid="stCaptionContainer"],
+    [data-testid="stCaptionContainer"] p,
+    .stCaption,
+    small {
+        color: #000000 !important;
+    }
+
+    /* Form card container */
     div[data-testid="stForm"] {
-        background-color: white;
+        background-color: #FFFFFF !important;
         padding: 1.5rem;
         border: 1px solid #DCE4EE;
         border-radius: 12px;
     }
 
-    div[data-testid="stMetric"] {
-        background-color: white;
-        border: 1px solid #DCE4EE;
-        border-radius: 10px;
-        padding: 1rem;
+    /* Buttons (keep text clean white on navy) */
+    div.stButton > button,
+    div.stFormSubmitButton > button,
+    div[data-testid="stFormSubmitButton"] > button {
+        background-color: #17365D !important;
+        color: #FFFFFF !important;
+        border: 1px solid #17365D !important;
+        border-radius: 8px;
+        min-height: 44px;
+        font-weight: 600;
+    }
+
+    div.stButton > button *,
+    div.stFormSubmitButton > button *,
+    div[data-testid="stFormSubmitButton"] > button * {
+        color: #FFFFFF !important;
+    }
+
+    div.stButton > button:hover,
+    div.stFormSubmitButton > button:hover,
+    div[data-testid="stFormSubmitButton"] > button:hover {
+        background-color: #244F7D !important;
+        color: #FFFFFF !important;
+        border-color: #244F7D !important;
     }
 
     div[data-testid="stProgressBar"] {

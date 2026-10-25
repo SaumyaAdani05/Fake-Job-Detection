@@ -21,8 +21,14 @@ st.markdown(
             padding-bottom: 3rem;
         }
 
-        h1, h2, h3 {
-            color: #142D4E !important;
+        h1, h2, h3, h4, h5, h6,
+        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+        .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+            color: #000000 !important;
+        }
+
+        p, label, .stMarkdown, .stMarkdown p {
+            color: #000000 !important;
         }
 
         .info-card {
@@ -34,18 +40,19 @@ st.markdown(
         }
 
         .metric-value {
-            color: #17365D;
+            color: #000000 !important;
             font-size: 28px;
             font-weight: 700;
         }
 
         .metric-label {
-            color: #64748B;
+            color: #334155 !important;
             font-size: 14px;
+            font-weight: 500;
         }
 
         .step-number {
-            color: #244F7D;
+            color: #17365D;
             font-size: 24px;
             font-weight: 700;
         }
