@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 
 import streamlit as st
 
@@ -7,192 +9,159 @@ st.set_page_config(
     layout="wide",
 )
 
-# Professional styling
 st.markdown(
     """
     <style>
-        .stApp {
-            background-color: #F7F9FC;
-        }
-
-        .block-container {
-            max-width: 1150px;
-            padding-top: 2rem;
-            padding-bottom: 3rem;
-        }
-
-        h1, h2, h3 {
-            color: #142D4E !important;
-        }
-
-        .info-card {
-            background: #FFFFFF;
-            border: 1px solid #DCE4EE;
-            border-radius: 12px;
-            padding: 20px;
-            height: 100%;
-        }
-
-        .metric-value {
-            color: #17365D;
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .metric-label {
-            color: #64748B;
-            font-size: 14px;
-        }
-
-        .step-number {
-            color: #244F7D;
-            font-size: 24px;
-            font-weight: 700;
-        }
+    :root { --navy:#122744; --blue:#2563EB; --ink:#24364B; --muted:#64748B; --line:#DCE5F0; }
+    .stApp { background:#F5F8FC; }
+    .block-container { max-width:1180px; padding-top:1.5rem; padding-bottom:3rem; }
+    h1,h2,h3 { color:var(--navy) !important; letter-spacing:-.025em; }
+    p,.stMarkdown { color:var(--ink); }
+    .hero {
+      background:linear-gradient(115deg,#FFFFFF 0%,#F0F6FF 100%);
+      border:1px solid var(--line); border-radius:22px; padding:1.7rem 2rem;
+      margin:.4rem 0 1.2rem 0; box-shadow:0 8px 28px rgba(18,39,68,.045);
+    }
+    .eyebrow { color:var(--blue); font-size:.76rem; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+    .hero-title { color:var(--navy); font-size:2rem; font-weight:800; line-height:1.2; margin:.4rem 0; }
+    .hero-copy { color:#52657D; font-size:1rem; max-width:800px; }
+    .info-card {
+      background:#FFFFFF; border:1px solid var(--line); border-radius:16px;
+      padding:1.15rem 1.25rem; height:100%; box-shadow:0 4px 16px rgba(18,39,68,.035);
+    }
+    .step-number { display:inline-block; background:#E7F0FF; color:#174EA6; border-radius:9px;
+      padding:.25rem .55rem; font-size:.78rem; font-weight:850; letter-spacing:.06em; }
+    .metric-value { color:#174EA6; font-size:1.8rem; font-weight:850; letter-spacing:-.03em; }
+    .metric-label { color:#64748B; font-size:.85rem; font-weight:650; }
+    div[data-testid="stMetric"] { background:#FFFFFF; border:1px solid var(--line); border-radius:14px; padding:1rem; }
+    hr { border-color:var(--line); }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Page header
 st.markdown(
-    "<p style='color:#64748B;font-size:0.85rem;"
-    "font-weight:600;letter-spacing:2px;'>"
-    "PROJECT GUIDE</p>",
+    """
+    <div class="hero">
+      <div class="eyebrow">PROJECT GUIDE · TRANSPARENT SCREENING</div>
+      <div class="hero-title">Understand the signal behind the score.</div>
+      <div class="hero-copy">
+        Learn how the application combines a trained machine-learning pipeline
+        with rule-based explanations to help review potentially risky job postings.
+      </div>
+    </div>
+    """,
     unsafe_allow_html=True,
 )
 
-st.title("📘 How It Works")
-st.markdown(
-    "### Understanding the Fake Job Detection system"
-)
-st.write(
-    "This application analyses job-posting information using a "
-    "trained machine learning model and rule-based explanations "
-    "to help users identify potentially fraudulent vacancies."
-)
-
-st.divider()
-
-# Overview
-st.header("1. How the system works")
-
+st.markdown("## How the workflow works")
 steps = [
-    (
-        "01",
-        "Enter job details",
-        "Enter job title, location, company information, description, "
-        "requirements and other available details. Alternatively, "
-        "paste the complete posting using Quick Paste.",
-    ),
-    (
-        "02",
-        "Analyse the posting",
-        "The application passes the supplied information to the "
-        "trained prediction pipeline, which processes the available "
-        "features and estimates the likelihood of fraud.",
-    ),
-    (
-        "03",
-        "Review the result",
-        "The application displays a verdict, estimated fake probability "
-        "and explanatory warning signs or positive indicators.",
-    ),
+    ("01", "Provide job details", "Enter the role, company profile, description, requirements and other available fields, or use Quick Paste."),
+    ("02", "Run the analysis", "The application sends the submitted fields to the existing prediction pipeline, which processes the information and estimates fake probability."),
+    ("03", "Review the evidence", "The app displays a label, probability estimate and explanatory signals to guide independent verification."),
 ]
-
 cols = st.columns(3)
-
 for col, (number, title, description) in zip(cols, steps):
     with col:
         st.markdown(
             f"""
             <div class="info-card">
-                <div class="step-number">{number}</div>
-                <h3>{title}</h3>
-                <p>{description}</p>
+              <div class="step-number">STEP {number}</div>
+              <h3 style="margin-top:.8rem;">{title}</h3>
+              <p>{description}</p>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
 st.divider()
-
-# Model information
-st.header("2. Machine learning model")
-
+st.markdown("## The machine-learning model")
 st.markdown(
     """
-    The project uses **tuned Logistic Regression** with a custom
-    text and rule-based preprocessing pipeline.
-
-    Logistic Regression estimates the probability of a posting
-    belonging to the fraudulent class based on patterns learned
-    during training. The application combines the model output
-    with rule-based explanations to help users understand possible
-    warning signs.
+    The project uses **tuned Logistic Regression** with a custom text and
+    rule-based preprocessing pipeline. The model estimates the probability
+    associated with the fraudulent class. Rule-based explanations provide
+    readable context about possible warning signs.
     """
 )
 
-col1, col2 = st.columns(2)
-
-with col1:
+model_col, label_col = st.columns(2)
+with model_col:
     st.markdown(
         """
         <div class="info-card">
-            <h3>Model</h3>
-            <p><b>Algorithm:</b> Tuned Logistic Regression</p>
-            <p><b>Input:</b> Job-posting text and supported fields</p>
-            <p><b>Output:</b> Risk label, fake probability and reasons</p>
-            <p><b>Decision threshold:</b> 0.7972</p>
+          <div class="eyebrow">MODEL OVERVIEW</div>
+          <h3>What goes in and comes out</h3>
+          <p><b>Algorithm:</b> Tuned Logistic Regression</p>
+          <p><b>Inputs:</b> Job-posting text and supported fields</p>
+          <p><b>Outputs:</b> Risk label, fake probability and reasons</p>
+          <p><b>Decision threshold:</b> Read from the project's training metrics configuration</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+with label_col:
+    st.markdown(
+        """
+        <div class="info-card">
+          <div class="eyebrow">HOW TO READ THE RESULT</div>
+          <h3>Three assessment labels</h3>
+          <p>🚩 <b>Likely Fake:</b> The model estimates stronger fraud signals.</p>
+          <p>⚠️ <b>Suspicious:</b> Further checks are advisable.</p>
+          <p>✓ <b>Likely Real:</b> Fewer fraud signals were detected.</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-with col2:
-    st.markdown(
-        """
-        <div class="info-card">
-            <h3>Prediction labels</h3>
-            <p>🚨 <b>Likely Fake:</b> Stronger indicators of fraud.</p>
-            <p>⚠️ <b>Suspicious:</b> Further verification is advisable.</p>
-            <p>✅ <b>Likely Real:</b> Fewer indicators of fraud were detected.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-st.caption(
-    "The labels reflect the application's prediction pipeline. "
-    "They are not definitive proof of whether an employer is genuine."
-)
+st.caption("These labels are generated by the project's prediction pipeline and are not definitive proof of an employer's legitimacy.")
 
 st.divider()
+st.markdown("## Model evaluation")
+st.write("Reported test-set metrics for the trained model are shown below.")
+# Read the project metrics if available. Fall back to the reported values from the existing page.
+metrics_path = Path(__file__).resolve().parents[1] / "models" / "metrics.json"
+metrics_data = {}
+if metrics_path.exists():
+    try:
+        with metrics_path.open("r", encoding="utf-8") as metrics_file:
+            metrics_data = json.load(metrics_file)
+    except (OSError, json.JSONDecodeError):
+        metrics_data = {}
 
-# Evaluation metrics
-st.header("3. Model evaluation")
+def find_metric(keys, fallback):
+    """Find a numeric metric by likely key names without changing model code."""
+    for key in keys:
+        value = metrics_data.get(key)
+        if isinstance(value, (int, float)):
+            return float(value)
+    nested = metrics_data.get("metrics", {})
+    if isinstance(nested, dict):
+        for key in keys:
+            value = nested.get(key)
+            if isinstance(value, (int, float)):
+                return float(value)
+    return fallback
 
-st.write(
-    "The following figures are the reported test-set metrics "
-    "provided for this project's trained model."
-)
+precision = find_metric(["fake_precision", "precision", "precision_fake"], 0.8417)
+recall = find_metric(["fake_recall", "recall", "recall_fake"], 0.7891)
+f1 = find_metric(["fake_f1", "f1", "f1_score", "f1_fake"], 0.8145)
+roc_auc = find_metric(["roc_auc", "roc-auc", "auc"], 0.9888)
 
-metrics = [
-    ("84.17%", "Fake-class precision"),
-    ("78.91%", "Fake-class recall"),
-    ("81.45%", "Fake-class F1-score"),
-    ("98.88%", "ROC-AUC"),
+metric_items = [
+    (f"{precision:.2%}", "Fake-class precision"),
+    (f"{recall:.2%}", "Fake-class recall"),
+    (f"{f1:.2%}", "Fake-class F1-score"),
+    (f"{roc_auc:.2%}", "ROC-AUC"),
 ]
-
 cols = st.columns(4)
-
-for col, (value, label) in zip(cols, metrics):
+for col, (value, label) in zip(cols, metric_items):
     with col:
         st.markdown(
             f"""
             <div class="info-card">
-                <div class="metric-value">{value}</div>
-                <div class="metric-label">{label}</div>
+              <div class="metric-value">{value}</div>
+              <div class="metric-label">{label}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -201,69 +170,55 @@ for col, (value, label) in zip(cols, metrics):
 with st.expander("What do these metrics mean?"):
     st.markdown(
         """
-        - **Precision (84.17%):** Among postings predicted as fake,
-          the proportion that were actually fake in the evaluation set.
-        - **Recall (78.91%):** The proportion of fake postings in the
-          evaluation set that the model successfully identified.
-        - **F1-score (81.45%):** A combined measure of precision and
-          recall.
-        - **ROC-AUC (98.88%):** Measures how well the model separates
-          fake and real postings across different classification
-          thresholds.
+        - **Precision:** Of the postings flagged as fake, the proportion that were actually fake in the evaluation set.
+        - **Recall:** Of the fake postings in the evaluation set, the proportion the model identified.
+        - **F1-score:** A combined measure of precision and recall.
+        - **ROC-AUC:** Measures how well the model separates fake and real postings across classification thresholds.
         """
     )
 
-st.info(
-    "These are test-set results, not a guarantee of performance on "
-    "every new job posting. Results may vary with the data and context."
-)
+st.info("These are evaluation-set measurements, not a guarantee of performance on every new posting. Metrics are loaded from models/metrics.json when recognized; otherwise the previously reported project values are shown.")
 
 st.divider()
-
-# Rules and safety
-st.header("4. Warning signs the application may highlight")
-
-st.markdown(
-    """
-    Depending on the information supplied, the explanation system
-    may flag indicators such as:
-
-    - Requests for registration fees or payments from applicants.
-    - Missing company information or a company logo.
-    - Pressure language that urges applicants to act immediately.
-    - Very short or incomplete job descriptions.
-    - Other patterns identified by the project's rules and model.
-
-    A single indicator does not prove that a posting is fraudulent.
-    Likewise, a detailed description or company logo does not prove
-    that an employer is legitimate.
-    """
-)
+st.markdown("## Signals to review")
+left, right = st.columns(2)
+with left:
+    st.markdown(
+        """
+        <div class="info-card">
+          <h3>Potential warning signs</h3>
+          <p>• Requests for registration fees or payments from applicants.</p>
+          <p>• Missing or vague company information.</p>
+          <p>• Pressure language asking applicants to act immediately.</p>
+          <p>• Very short or incomplete job descriptions.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+with right:
+    st.markdown(
+        """
+        <div class="info-card">
+          <h3>What these signs mean</h3>
+          <p>A signal is a reason to investigate, not proof of fraud.</p>
+          <p>A company logo or detailed description does not prove a role is legitimate.</p>
+          <p>Always confirm vacancies using independent, official employer channels.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 st.divider()
-
-# Responsible use
-st.header("5. How to stay safe when applying")
-
+st.markdown("## Practical safety checklist")
 st.markdown(
     """
-    1. Verify the employer through its official website and contact details.
+    1. Verify the employer using its official website and contact information.
     2. Never pay a recruitment or registration fee to obtain a job.
-    3. Be cautious about requests for bank details, passwords or identity
-       documents before verifying the employer.
-    4. Check whether the vacancy is published through a trustworthy
-       recruitment channel.
-    5. Use the model as a screening aid, not as the only basis for a decision.
+    3. Be cautious with requests for bank details, passwords or identity documents before verification.
+    4. Check whether the vacancy appears on a trustworthy recruitment channel.
+    5. Use this model as a screening aid, not the sole basis for a decision.
     """
 )
-
-st.warning(
-    "This project is an academic screening tool. Its predictions are "
-    "not a substitute for independent verification or professional advice."
-)
-
+st.warning("This is an academic screening tool. Its predictions should be combined with independent verification.")
 st.divider()
-
-st.caption(
-    "Academic project | Fake Job Detection | Machine Learning Essentials"
-)
+st.caption("Academic project · Fake Job Detection · Machine Learning Essentials")
